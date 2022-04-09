@@ -6,8 +6,8 @@
 #include <GL/freeglut.h>
 #include "math_3d.h"
 
-GLuint VBO;
-GLuint gWorldLocation;
+GLuint VBO; //назначила GLuint в качестве глобальной переменной для хранения указателя на буфер вершин
+GLuint gWorldLocation; //указатель для доступа к всемирной матрице
 
 
 static const char* pVS = "                                                          \n\
@@ -32,9 +32,9 @@ void main()                                                                     
     FragColor = vec4(1.0, 0.0, 0.0, 1.0);                                           \n\
 }";
 
-static void RenderSceneCB()
+static void RenderSceneCB() //функцию отображения на экран
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);   //Очистка буфера кадра
 
     static float Scale = 0.0f;
 
@@ -50,10 +50,10 @@ static void RenderSceneCB()
     World.m[2][0] = 0.0f; ; World.m[2][1] = 0.0f; ; World.m[2][2] = sinf(Scale); World.m[2][3] = 0.0f;
     World.m[3][0] = 0.0f; ; World.m[3][1] = 0.0f; ; World.m[3][2] = 0.0f;        World.m[3][3] = 1.0f;
 
-    glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, &World.m[0][0]);
+    glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, &World.m[0][0]); //загружаем матрицу в шейдер
 
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glEnableVertexAttribArray(0);   //Координаты вершин, используемые в буфере, рассматриваются как атрибут вершины с индексом 0 в фиксированной функции конвейера
+    glBindBuffer(GL_ARRAY_BUFFER, VBO); //обратно привязываем наш буфер, приготавливая его для отрисовки
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
